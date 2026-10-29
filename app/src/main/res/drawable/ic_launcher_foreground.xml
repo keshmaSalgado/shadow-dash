@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#070A14"
+        android:pathData="M0,0h108v108h-108z"/>
+    <!-- Magical Crescent Moon in background -->
+    <path
+        android:fillColor="#3D5AFE"
+        android:pathData="M65,22a20,20 0 1,0 16,28a16,16 0 1,1 -16,-28z"/>
+    <!-- Shadow creature body -->
+    <path
+        android:fillColor="#121829"
+        android:pathData="M54,42 C40,42 32,54 32,70 C32,82 42,88 54,88 C66,88 76,82 76,70 C76,54 68,42 54,42 Z"/>
+    <!-- Horns / ears -->
+    <path
+        android:fillColor="#121829"
+        android:pathData="M38,50 L30,30 L46,44 Z"/>
+    <path
+        android:fillColor="#121829"
+        android:pathData="M70,50 L78,30 L62,44 Z"/>
+    <!-- Glowing cyan eyes -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M44,62 A4,6 0 1,0 44,74 A4,6 0 1,0 44,62 Z"/>
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M64,62 A4,6 0 1,0 64,74 A4,6 0 1,0 64,62 Z"/>
+</vector>
+
