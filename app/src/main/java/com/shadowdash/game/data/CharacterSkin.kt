@@ -6,7 +6,13 @@ enum class ParticleType {
     SHADOW_SMOKE,
     CYAN_SPARKS,
     VOID_EMBERS,
-    CRIMSON_FLAMES
+    CRIMSON_FLAMES,
+    STARLIGHT_DUST,
+    SOLAR_SPARKS,
+    EMERALD_SPORES,
+    CYBER_PIXELS,
+    FROST_CRYSTALS,
+    COSMIC_RUNES
 }
 
 data class CharacterSkin(
