@@ -133,6 +133,38 @@ fun GameScreen(
                 onMainMenu = onNavigateToMenu
             )
         }
+
+        // 6. Now Playing Soundtrack Indicator (subtly displayed during the start of a run)
+        val currentTrack = remember(preferences.selectedMusicTrackId) {
+            com.shadowdash.game.audio.MusicTrack.getById(preferences.selectedMusicTrackId)
+        }
+        if (gameMode == GameMode.PLAYING && runStats.distance < 65f) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 18.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color(0xCC091225))
+                    .border(1.dp, NeonCyan.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = androidx.compose.material.icons.Icons.Default.MusicNote,
+                        contentDescription = "Soundtrack",
+                        tint = NeonCyan,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "${currentTrack.title} • ${currentTrack.tempoBpm} BPM",
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -299,7 +331,7 @@ private fun CountdownOverlay(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "TAP to Jump  •  SWIPE DOWN to Slide",
+                text = "TAP to Jump  â€¢  SWIPE DOWN to Slide",
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
@@ -406,7 +438,7 @@ private fun GameOverOverlay(
         ) {
             if (stats.isNewHighScore) {
                 Text(
-                    text = "★ NEW BEST RECORD! ★",
+                    text = "â˜… NEW BEST RECORD! â˜…",
                     color = GoldAccent,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Black,
