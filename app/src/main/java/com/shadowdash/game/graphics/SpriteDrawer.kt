@@ -437,7 +437,43 @@ class SpriteDrawer {
             alpha = (particle.alphaRatio * 255).toInt()
             style = Paint.Style.FILL
         }
-        canvas.drawCircle(particle.x, particle.y, particle.size, pPaint)
+
+        val px = particle.x
+        val py = particle.y
+        val s = particle.size
+
+        when (particle.type) {
+            com.shadowdash.game.data.ParticleType.CYBER_PIXELS -> {
+                // Square digital data pixel
+                canvas.drawRect(px - s, py - s, px + s, py + s, pPaint)
+            }
+            com.shadowdash.game.data.ParticleType.STARLIGHT_DUST -> {
+                // 4-point diamond star
+                path.reset()
+                path.moveTo(px, py - s * 1.5f)
+                path.lineTo(px + s * 0.7f, py)
+                path.lineTo(px, py + s * 1.5f)
+                path.lineTo(px - s * 0.7f, py)
+                path.close()
+                canvas.drawPath(path, pPaint)
+            }
+            com.shadowdash.game.data.ParticleType.FROST_CRYSTALS -> {
+                // Ice crystal shard cross
+                pPaint.strokeWidth = 2f
+                pPaint.style = Paint.Style.STROKE
+                canvas.drawLine(px - s, py, px + s, py, pPaint)
+                canvas.drawLine(px, py - s, px, py + s, pPaint)
+            }
+            com.shadowdash.game.data.ParticleType.COSMIC_RUNES -> {
+                // Glowing astral rune ring
+                pPaint.style = Paint.Style.STROKE
+                pPaint.strokeWidth = 2.5f
+                canvas.drawCircle(px, py, s, pPaint)
+            }
+            else -> {
+                canvas.drawCircle(px, py, s, pPaint)
+            }
+        }
     }
 }
 
