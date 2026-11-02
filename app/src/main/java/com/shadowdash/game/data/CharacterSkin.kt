@@ -73,6 +73,17 @@ data class CharacterSkin(
                 eyeColor = 0xFFFF1744,
                 auraColor = 0x66FF5252,
                 particleType = ParticleType.CRIMSON_FLAMES
+            ),
+            CharacterSkin(
+                id = "lunar_oracle",
+                name = "Lunar Oracle",
+                description = "Blessed by the full moon, trailing soft silvery starlight dust.",
+                cost = 75,
+                isUnlockedByDefault = false,
+                bodyColor = 0xFF172038,
+                eyeColor = 0xFFE0E7FF,
+                auraColor = 0x66C7D2FE,
+                particleType = ParticleType.STARLIGHT_DUST
             )
         )
 
