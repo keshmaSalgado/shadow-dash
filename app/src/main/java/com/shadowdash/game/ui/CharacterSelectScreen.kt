@@ -285,9 +285,6 @@ private fun CharacterCard(
                 maxLines = 2
             )
         }
-                lineHeight = 14.sp
-            )
-        }
 
         // Action Button (Equip / Equipped / Unlock)
         if (isSelected) {

@@ -114,7 +114,7 @@ class GameLogicTest {
 
     @Test
     fun testSkinsCatalog() {
-        assertEquals(4, CharacterSkin.ALL_SKINS.size)
+        assertEquals(10, CharacterSkin.ALL_SKINS.size)
         val defaultSkin = CharacterSkin.getById("shadow_sprite")
         assertTrue(defaultSkin.isUnlockedByDefault)
         assertEquals(0, defaultSkin.cost)
@@ -122,6 +122,30 @@ class GameLogicTest {
         val neon = CharacterSkin.getById("neon_phantom")
         assertFalse(neon.isUnlockedByDefault)
         assertEquals(50, neon.cost)
+
+        val dragon = CharacterSkin.getById("celestial_dragon")
+        assertFalse(dragon.isUnlockedByDefault)
+        assertEquals(400, dragon.cost)
+        assertEquals(com.shadowdash.game.data.ParticleType.COSMIC_RUNES, dragon.particleType)
+
+        val uniqueIds = CharacterSkin.ALL_SKINS.map { it.id }.toSet()
+        assertEquals("All skin IDs must be distinct", CharacterSkin.ALL_SKINS.size, uniqueIds.size)
+    }
+
+    @Test
+    fun testMusicTrackCatalog() {
+        assertEquals(4, com.shadowdash.game.audio.MusicTrack.ALL_TRACKS.size)
+
+        val twilight = com.shadowdash.game.audio.MusicTrack.getById("twilight_reverie")
+        assertEquals("Twilight Reverie", twilight.title)
+        assertEquals(85, twilight.tempoBpm)
+
+        val neon = com.shadowdash.game.audio.MusicTrack.getById("neon_velocity")
+        assertEquals("Neon Velocity", neon.title)
+        assertEquals(128, neon.tempoBpm)
+
+        val fallback = com.shadowdash.game.audio.MusicTrack.getById("unknown_track_id")
+        assertEquals("twilight_reverie", fallback.id)
     }
 }
 
