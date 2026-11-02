@@ -134,9 +134,79 @@ class SpriteDrawer {
 
             // Big expressive eyes
             drawEyes(canvas, eyeX = 10f, eyeY = -6f, player = player, isSliding = false)
+
+            // Custom Headpieces, Horns, and Halos based on skin
+            drawSkinOrnaments(canvas, halfW, halfH, player.skin.id)
         }
 
         canvas.restore()
+    }
+
+    private fun drawSkinOrnaments(canvas: Canvas, halfW: Float, halfH: Float, skinId: String) {
+        val ornamentPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        when (skinId) {
+            "lunar_oracle" -> {
+                // Silvery crescent halo above head
+                ornamentPaint.color = 0xFFE0E7FF.toInt()
+                ornamentPaint.style = Paint.Style.STROKE
+                ornamentPaint.strokeWidth = 3f
+                canvas.drawOval(-halfW * 0.4f, -halfH - 24f, halfW * 0.4f, -halfH - 12f, ornamentPaint)
+            }
+            "solar_phoenix" -> {
+                // Blazing feather crest
+                ornamentPaint.color = 0xFFFFD700.toInt()
+                ornamentPaint.style = Paint.Style.FILL
+                path.reset()
+                path.moveTo(0f, -halfH)
+                path.lineTo(-6f, -halfH - 22f)
+                path.lineTo(0f, -halfH - 14f)
+                path.lineTo(6f, -halfH - 22f)
+                path.close()
+                canvas.drawPath(path, ornamentPaint)
+            }
+            "emerald_guardian" -> {
+                // Forest leaf antlers
+                ornamentPaint.color = 0xFF10B981.toInt()
+                ornamentPaint.style = Paint.Style.FILL
+                canvas.drawOval(-halfW * 0.7f, -halfH - 16f, -halfW * 0.4f, -halfH, ornamentPaint)
+                canvas.drawOval(halfW * 0.4f, -halfH - 16f, halfW * 0.7f, -halfH, ornamentPaint)
+            }
+            "cyber_glitch" -> {
+                // Cyberpunk holographic visor strip
+                ornamentPaint.color = 0xFF00FF66.toInt()
+                ornamentPaint.style = Paint.Style.STROKE
+                ornamentPaint.strokeWidth = 2.5f
+                canvas.drawLine(-halfW * 0.5f, -halfH * 0.15f, halfW * 0.75f, -halfH * 0.15f, ornamentPaint)
+            }
+            "frost_specter" -> {
+                // Sharp glacial ice spikes
+                ornamentPaint.color = 0xFFBAE6FD.toInt()
+                ornamentPaint.style = Paint.Style.FILL
+                path.reset()
+                path.moveTo(-halfW * 0.3f, -halfH + 4f)
+                path.lineTo(-halfW * 0.35f, -halfH - 16f)
+                path.lineTo(-halfW * 0.15f, -halfH)
+                path.close()
+                canvas.drawPath(path, ornamentPaint)
+            }
+            "celestial_dragon" -> {
+                // Swept-back golden astral dragon horns
+                ornamentPaint.color = 0xFFFDE047.toInt()
+                ornamentPaint.style = Paint.Style.FILL
+                path.reset()
+                path.moveTo(-halfW * 0.2f, -halfH + 6f)
+                path.lineTo(-halfW * 0.85f, -halfH - 24f)
+                path.lineTo(-halfW * 0.1f, -halfH - 2f)
+                path.close()
+                canvas.drawPath(path, ornamentPaint)
+                path.reset()
+                path.moveTo(halfW * 0.2f, -halfH + 6f)
+                path.lineTo(halfW * 0.85f, -halfH - 24f)
+                path.lineTo(halfW * 0.1f, -halfH - 2f)
+                path.close()
+                canvas.drawPath(path, ornamentPaint)
+            }
+        }
     }
 
     private fun drawEyes(canvas: Canvas, eyeX: Float, eyeY: Float, player: Player, isSliding: Boolean) {
