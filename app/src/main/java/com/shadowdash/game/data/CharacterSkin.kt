@@ -95,6 +95,17 @@ data class CharacterSkin(
                 eyeColor = 0xFFFFD700,
                 auraColor = 0x66FFA000,
                 particleType = ParticleType.SOLAR_SPARKS
+            ),
+            CharacterSkin(
+                id = "emerald_guardian",
+                name = "Emerald Guardian",
+                description = "Ancient forest druid spirit emitting bioluminescent jade spores.",
+                cost = 180,
+                isUnlockedByDefault = false,
+                bodyColor = 0xFF062817,
+                eyeColor = 0xFF10B981,
+                auraColor = 0x6634D399,
+                particleType = ParticleType.EMERALD_SPORES
             )
         )
 
