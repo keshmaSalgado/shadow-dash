@@ -82,6 +82,11 @@ object SoundGenerator {
             generateNeonVelocityMusic()
         }
 
+        // 12. Starfall Sanctuary (Celestial nocturnal piano & bell chimes 96 BPM)
+        soundMap["starfall_sanctuary"] = getOrCreateWav(audioDir, "starfall_sanctuary.wav") {
+            generateStarfallSanctuaryMusic()
+        }
+
         return soundMap
     }
 
@@ -318,6 +323,49 @@ object SoundGenerator {
 
             val mixed = (lead + bass + kick).coerceIn(-1.0, 1.0)
             samples[i] = (mixed * 19000).toInt().toShort()
+        }
+        return samples
+    }
+
+    private fun generateStarfallSanctuaryMusic(): ShortArray {
+        // 8.0 seconds peaceful celestial piano & bell harmony loop
+        val durationSec = 8.0f
+        val numSamples = (SAMPLE_RATE * durationSec).toInt()
+        val samples = ShortArray(numSamples)
+
+        val chords = listOf(
+            doubleArrayOf(164.81, 196.0, 246.94, 329.63), // Em
+            doubleArrayOf(130.81, 164.81, 196.0, 246.94), // Cmaj7
+            doubleArrayOf(196.0, 246.94, 293.66, 392.0),  // G
+            doubleArrayOf(146.83, 220.0, 293.66, 440.0)   // D
+        )
+
+        val chordDuration = numSamples / 4
+        val chimeNotes = doubleArrayOf(659.25, 783.99, 987.77, 1174.66, 1318.51) // E5, G5, B5, D6, E6
+
+        for (i in 0 until numSamples) {
+            val t = i.toDouble() / SAMPLE_RATE
+            val chordIndex = (i / chordDuration) % 4
+            val timeInChord = (i % chordDuration).toDouble() / SAMPLE_RATE
+
+            // Warm electric piano attack + decay
+            val pianoDecay = exp(-timeInChord * 1.8)
+            val notes = chords[chordIndex]
+            var pianoWave = 0.0
+            for (f in notes) {
+                pianoWave += sin(2.0 * PI * f * t) + 0.25 * sin(4.0 * PI * f * t)
+            }
+            pianoWave = (pianoWave / notes.size) * pianoDecay * 0.42
+
+            // High twinkling celestial bell chime every 0.5s
+            val chimeStep = (t / 0.5).toInt()
+            val timeInChime = t - (chimeStep * 0.5)
+            val chimeFreq = chimeNotes[(chimeStep * 3) % chimeNotes.size]
+            val chimeDecay = exp(-timeInChime * 10.0)
+            val chimeWave = (sin(2.0 * PI * chimeFreq * t) + 0.3 * sin(2.0 * PI * chimeFreq * 2.76 * t)) * chimeDecay * 0.22
+
+            val mixed = (pianoWave + chimeWave).coerceIn(-1.0, 1.0)
+            samples[i] = (mixed * 18500).toInt().toShort()
         }
         return samples
     }
