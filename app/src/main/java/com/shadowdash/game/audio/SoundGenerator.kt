@@ -71,8 +71,15 @@ object SoundGenerator {
         }
 
         // 10. Ambient Music Loop (Ethereal night forest soundscape)
-        soundMap["ambient_music"] = getOrCreateWav(audioDir, "ambient_forest.wav") {
+        val twilightWav = getOrCreateWav(audioDir, "ambient_forest.wav") {
             generateAmbientForestMusic()
+        }
+        soundMap["twilight_reverie"] = twilightWav
+        soundMap["ambient_music"] = twilightWav
+
+        // 11. Neon Velocity (Synthwave cyber pulse 128 BPM)
+        soundMap["neon_velocity"] = getOrCreateWav(audioDir, "neon_velocity.wav") {
+            generateNeonVelocityMusic()
         }
 
         return soundMap
@@ -260,6 +267,57 @@ object SoundGenerator {
             val shimmer = sin(2.0 * PI * 880.0 * t) * 0.05 * sin(t * 1.5)
             val finalSample = (sumWave + shimmer).coerceIn(-1.0, 1.0)
             samples[i] = (finalSample * 18000).toInt().toShort()
+        }
+        return samples
+    }
+
+    private fun generateNeonVelocityMusic(): ShortArray {
+        // 7.5 seconds (16 beats at 128 BPM) synthwave arpeggio loop
+        val durationSec = 7.5f
+        val numSamples = (SAMPLE_RATE * durationSec).toInt()
+        val samples = ShortArray(numSamples)
+
+        val beatDuration = durationSec / 16.0
+        val sixteenthDuration = beatDuration / 4.0
+
+        // Chord progression: Dm -> Bb -> F -> C
+        val arpeggioNotes = listOf(
+            doubleArrayOf(146.83, 220.0, 293.66, 349.23, 440.0, 587.33), // Dm
+            doubleArrayOf(116.54, 174.61, 233.08, 293.66, 349.23, 466.16), // Bb
+            doubleArrayOf(174.61, 220.0, 261.63, 349.23, 440.0, 523.25), // F
+            doubleArrayOf(130.81, 164.81, 196.0, 261.63, 329.63, 392.0)   // C
+        )
+
+        for (i in 0 until numSamples) {
+            val t = i.toDouble() / SAMPLE_RATE
+            val sixteenthIndex = (t / sixteenthDuration).toInt()
+            val measureIndex = (sixteenthIndex / 16) % 4
+            val stepInMeasure = sixteenthIndex % 16
+
+            val notes = arpeggioNotes[measureIndex]
+            val noteFreq = notes[stepInMeasure % notes.size]
+            val timeInStep = t - (sixteenthIndex * sixteenthDuration)
+            val pluckDecay = exp(-timeInStep * 18.0)
+
+            // Synth lead arpeggiator (sine + harmonics)
+            val lead = (sin(2.0 * PI * noteFreq * t) +
+                    0.4 * sin(4.0 * PI * noteFreq * t) +
+                    0.2 * sin(6.0 * PI * noteFreq * t)) * pluckDecay * 0.35
+
+            // Driving bass pulse on 8th notes
+            val bassStep = (stepInMeasure / 2) % 2
+            val bassFreq = notes[0] * 0.5
+            val bassDecay = exp(-(t % (beatDuration / 2.0)) * 12.0)
+            val bass = (sin(2.0 * PI * bassFreq * t) + 0.3 * sin(4.0 * PI * bassFreq * t)) * bassDecay * 0.38
+
+            // Subtle cyber kick drum on quarter beats
+            val timeInBeat = t % beatDuration
+            val kickDecay = exp(-timeInBeat * 28.0)
+            val kickFreq = (110.0 * exp(-timeInBeat * 35.0)).coerceAtLeast(45.0)
+            val kick = sin(2.0 * PI * kickFreq * timeInBeat) * kickDecay * 0.45
+
+            val mixed = (lead + bass + kick).coerceIn(-1.0, 1.0)
+            samples[i] = (mixed * 19000).toInt().toShort()
         }
         return samples
     }
