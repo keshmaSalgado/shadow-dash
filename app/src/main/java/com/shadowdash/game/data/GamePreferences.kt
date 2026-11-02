@@ -14,6 +14,7 @@ class GamePreferences(context: Context) {
         private const val KEY_SELECTED_SKIN = "selected_skin"
         private const val KEY_SOUND_ENABLED = "sound_enabled"
         private const val KEY_MUSIC_ENABLED = "music_enabled"
+        private const val KEY_SELECTED_MUSIC_TRACK = "selected_music_track"
         private const val KEY_HAPTICS_ENABLED = "haptics_enabled"
 
         @Volatile
@@ -45,6 +46,10 @@ class GamePreferences(context: Context) {
     var isMusicEnabled: Boolean
         get() = prefs.getBoolean(KEY_MUSIC_ENABLED, true)
         set(value) = prefs.edit().putBoolean(KEY_MUSIC_ENABLED, value).apply()
+
+    var selectedMusicTrackId: String
+        get() = prefs.getString(KEY_SELECTED_MUSIC_TRACK, "twilight_reverie") ?: "twilight_reverie"
+        set(value) = prefs.edit().putString(KEY_SELECTED_MUSIC_TRACK, value).apply()
 
     var isHapticsEnabled: Boolean
         get() = prefs.getBoolean(KEY_HAPTICS_ENABLED, true)
