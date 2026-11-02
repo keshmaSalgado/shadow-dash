@@ -38,6 +38,35 @@ class Particle(
                 vy -= 45f * dt // rise quickly
                 size *= (1f - 0.5f * dt)
             }
+            ParticleType.STARLIGHT_DUST -> {
+                vy -= 10f * dt // gentle levitation
+                vx *= 0.92f
+                size *= (1f - 0.25f * dt)
+            }
+            ParticleType.SOLAR_SPARKS -> {
+                vy -= 30f * dt // flare upwards with explosive spread
+                vx += (Math.random().toFloat() - 0.5f) * 80f * dt
+            }
+            ParticleType.EMERALD_SPORES -> {
+                vy += (Math.sin(life.toDouble() * 10.0).toFloat()) * 30f * dt // sinusoidal wave drift
+                vx *= 0.94f
+            }
+            ParticleType.CYBER_PIXELS -> {
+                // Stepped digital glitch movement
+                if (Math.random() < 0.1) {
+                    vx += (Math.random().toFloat() - 0.5f) * 140f
+                    vy += (Math.random().toFloat() - 0.5f) * 140f
+                }
+            }
+            ParticleType.FROST_CRYSTALS -> {
+                vy += 20f * dt // slow gentle snowfall drift
+                vx += (Math.random().toFloat() - 0.5f) * 25f * dt
+            }
+            ParticleType.COSMIC_RUNES -> {
+                vy -= 18f * dt // astral ascent
+                vx *= 0.9f
+                size *= (1f + 0.15f * dt)
+            }
         }
 
         life -= dt
