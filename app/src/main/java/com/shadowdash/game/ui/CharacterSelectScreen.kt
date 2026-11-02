@@ -95,13 +95,21 @@ fun CharacterSelectScreen(
                 )
             }
 
-            Text(
-                text = "CHARACTERS",
-                color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Black,
-                letterSpacing = 2.sp
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "CHARACTERS",
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Black,
+                    letterSpacing = 2.sp
+                )
+                Text(
+                    text = "${unlockedSkins.size} / ${CharacterSkin.ALL_SKINS.size} UNLOCKED",
+                    color = NeonCyan,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             // Crystal Counter
             Row(
@@ -173,27 +181,71 @@ private fun CharacterCard(
     onSelect: () -> Unit,
     onUnlock: () -> Unit
 ) {
+    val rarityColor = when {
+        skin.cost == 0 -> Color(0xFF94A3B8)
+        skin.cost <= 75 -> NeonCyan
+        skin.cost <= 180 -> NeonPurple
+        skin.cost <= 300 -> GoldAccent
+        else -> Color(0xFFFF5252)
+    }
+
+    val rarityName = when {
+        skin.cost == 0 -> "COMMON"
+        skin.cost <= 75 -> "RARE"
+        skin.cost <= 180 -> "EPIC"
+        skin.cost <= 300 -> "MYTHIC"
+        else -> "LEGENDARY"
+    }
+
     val borderColor = when {
         isSelected -> NeonCyan
-        isUnlocked -> NeonPurple.copy(alpha = 0.5f)
+        isUnlocked -> rarityColor.copy(alpha = 0.6f)
         else -> Color(0xFF334155)
     }
 
     Column(
         modifier = Modifier
-            .width(220.dp)
-            .height(290.dp)
+            .width(230.dp)
+            .height(310.dp)
             .clip(RoundedCornerShape(18.dp))
             .background(SurfaceCard)
             .border(2.dp, borderColor, RoundedCornerShape(18.dp))
-            .padding(16.dp),
+            .padding(14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+        // Top Rarity and Particle Trait Pill
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(rarityColor.copy(alpha = 0.2f))
+                    .padding(horizontal = 6.dp, vertical = 2.dp)
+            ) {
+                Text(
+                    text = rarityName,
+                    color = rarityColor,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Black
+                )
+            }
+
+            Text(
+                text = skin.particleType.name.replace("_", " "),
+                color = Color(0xFF64748B),
+                fontSize = 9.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
         // Visual Character Preview Badge
         Box(
             modifier = Modifier
-                .size(76.dp)
+                .size(72.dp)
                 .clip(CircleShape)
                 .background(Color(skin.auraColor.toInt()))
                 .border(2.dp, Color(skin.eyeColor.toInt()), CircleShape),
@@ -202,7 +254,7 @@ private fun CharacterCard(
             // Shadow entity inner body preview
             Box(
                 modifier = Modifier
-                    .size(52.dp)
+                    .size(50.dp)
                     .clip(CircleShape)
                     .background(Color(skin.bodyColor.toInt())),
                 contentAlignment = Alignment.Center
@@ -220,14 +272,19 @@ private fun CharacterCard(
             Text(
                 text = skin.name,
                 color = Color.White,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Black
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black,
+                maxLines = 1
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = skin.description,
                 color = Color(0xFF94A3B8),
-                fontSize = 11.sp,
+                fontSize = 10.sp,
+                lineHeight = 13.sp,
+                maxLines = 2
+            )
+        }
                 lineHeight = 14.sp
             )
         }
