@@ -84,6 +84,17 @@ data class CharacterSkin(
                 eyeColor = 0xFFE0E7FF,
                 auraColor = 0x66C7D2FE,
                 particleType = ParticleType.STARLIGHT_DUST
+            ),
+            CharacterSkin(
+                id = "solar_phoenix",
+                name = "Solar Phoenix",
+                description = "Radiates blinding solar radiance and blazing sun flare sparks.",
+                cost = 150,
+                isUnlockedByDefault = false,
+                bodyColor = 0xFF381504,
+                eyeColor = 0xFFFFD700,
+                auraColor = 0x66FFA000,
+                particleType = ParticleType.SOLAR_SPARKS
             )
         )
 
