@@ -14,6 +14,8 @@ class AudioManager private constructor(private val context: Context) {
     private val preferences = GamePreferences.getInstance(context)
     private var soundPool: SoundPool? = null
     private val soundIds = mutableMapOf<String, Int>()
+    private val musicFiles = mutableMapOf<String, File>()
+    private var currentPlayingTrackId: String? = null
     private var mediaPlayer: MediaPlayer? = null
     private val executor = Executors.newSingleThreadExecutor()
     private var isInitialized = false
@@ -61,23 +63,31 @@ class AudioManager private constructor(private val context: Context) {
                 val soundFiles = SoundGenerator.prepareAudioFiles(context)
                 soundPool?.let { pool ->
                     for ((key, file) in soundFiles) {
-                        if (key != "ambient_music" && file.exists()) {
+                        if (!isMusicKey(key) && file.exists()) {
                             val id = pool.load(file.absolutePath, 1)
                             soundIds[key] = id
+                        } else if (file.exists()) {
+                            musicFiles[key] = file
                         }
                     }
                 }
 
-                // Prepare music player
-                val musicFile = soundFiles["ambient_music"]
-                if (musicFile != null && musicFile.exists()) {
-                    prepareMusicPlayer(musicFile)
+                // Prepare and start current music player
+                val preferredTrackId = preferences.selectedMusicTrackId
+                val targetFile = musicFiles[preferredTrackId] ?: musicFiles["ambient_music"]
+                if (targetFile != null && targetFile.exists()) {
+                    currentPlayingTrackId = preferredTrackId
+                    prepareMusicPlayer(targetFile)
                 }
                 isInitialized = true
             } catch (e: Exception) {
                 Log.e(TAG, "Error initializing procedural audio", e)
             }
         }
+    }
+
+    private fun isMusicKey(key: String): Boolean {
+        return key == "ambient_music" || MusicTrack.ALL_TRACKS.any { it.id == key }
     }
 
     private fun prepareMusicPlayer(file: File) {
@@ -116,10 +126,12 @@ class AudioManager private constructor(private val context: Context) {
     fun startMusic() {
         if (preferences.isMusicEnabled) {
             try {
-                if (mediaPlayer == null) {
-                    val musicFile = File(File(context.cacheDir, "shadow_audio"), "ambient_forest.wav")
-                    if (musicFile.exists()) {
-                        prepareMusicPlayer(musicFile)
+                val targetTrackId = preferences.selectedMusicTrackId
+                if (currentPlayingTrackId != targetTrackId || mediaPlayer == null) {
+                    val file = musicFiles[targetTrackId] ?: musicFiles["ambient_music"]
+                    if (file != null && file.exists()) {
+                        currentPlayingTrackId = targetTrackId
+                        prepareMusicPlayer(file)
                     }
                 } else if (mediaPlayer?.isPlaying == false) {
                     mediaPlayer?.start()
@@ -128,6 +140,19 @@ class AudioManager private constructor(private val context: Context) {
                 Log.e(TAG, "Error starting music", e)
             }
         }
+    }
+
+    fun setMusicTrack(trackId: String) {
+        preferences.selectedMusicTrackId = trackId
+        currentPlayingTrackId = trackId
+        val file = musicFiles[trackId] ?: musicFiles["ambient_music"]
+        if (file != null && file.exists()) {
+            prepareMusicPlayer(file)
+        }
+    }
+
+    fun getCurrentTrack(): MusicTrack {
+        return MusicTrack.getById(preferences.selectedMusicTrackId)
     }
 
     fun pauseMusic() {
@@ -177,4 +202,3 @@ class AudioManager private constructor(private val context: Context) {
         }
     }
 }
-
