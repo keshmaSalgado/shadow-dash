@@ -106,6 +106,17 @@ data class CharacterSkin(
                 eyeColor = 0xFF10B981,
                 auraColor = 0x6634D399,
                 particleType = ParticleType.EMERALD_SPORES
+            ),
+            CharacterSkin(
+                id = "cyber_glitch",
+                name = "Cyber Glitch",
+                description = "Digital phantom forged in cyberspace, discharging matrix pixel debris.",
+                cost = 220,
+                isUnlockedByDefault = false,
+                bodyColor = 0xFF0B1B1E,
+                eyeColor = 0xFF00FF66,
+                auraColor = 0x66FF0055,
+                particleType = ParticleType.CYBER_PIXELS
             )
         )
 
