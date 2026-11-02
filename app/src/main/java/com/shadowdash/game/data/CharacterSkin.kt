@@ -117,6 +117,17 @@ data class CharacterSkin(
                 eyeColor = 0xFF00FF66,
                 auraColor = 0x66FF0055,
                 particleType = ParticleType.CYBER_PIXELS
+            ),
+            CharacterSkin(
+                id = "frost_specter",
+                name = "Frost Specter",
+                description = "Glacial revenant radiating sub-zero mist and floating ice crystals.",
+                cost = 300,
+                isUnlockedByDefault = false,
+                bodyColor = 0xFF0D233A,
+                eyeColor = 0xFFBAE6FD,
+                auraColor = 0x6638BDF8,
+                particleType = ParticleType.FROST_CRYSTALS
             )
         )
 
