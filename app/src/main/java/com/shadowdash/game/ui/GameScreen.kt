@@ -65,7 +65,7 @@ fun GameScreen(
     val preferences = remember { GamePreferences.getInstance(context) }
     val engine = remember { GameEngine(context) }
     var gameMode by remember { mutableStateOf(engine.gameMode) }
-    var runStats by remember { mutableStateOf(engine.stats) }
+    var runStats by remember { mutableStateOf(engine.stats.copy()) }
 
     // SurfaceView reference for pause/resume handling
     var surfaceViewRef by remember { mutableStateOf<GameSurfaceView?>(null) }
@@ -102,8 +102,8 @@ fun GameScreen(
         // 2. HUD Overlay
         GameHudOverlay(
             stats = runStats,
-            hasShield = engine.player.hasShield,
-            magnetRemaining = engine.player.magnetTimer,
+            hasShield = runStats.hasShield,
+            magnetRemaining = runStats.magnetRemaining,
             onPauseClick = { engine.pause() }
         )
 

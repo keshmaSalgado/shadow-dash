@@ -12,6 +12,7 @@ data class RunStats(
     var score: Int = 0,
     var crystalsCollected: Int = 0,
     var isNewHighScore: Boolean = false,
-    var countdownRemaining: Float = 3.0f
+    var countdownRemaining: Float = 3.0f,
+    var hasShield: Boolean = false,
+    var magnetRemaining: Float = 0f
 )
-

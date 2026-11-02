@@ -3,6 +3,8 @@ package com.shadowdash.game.engine
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import com.shadowdash.game.audio.AudioManager
 import com.shadowdash.game.data.CharacterSkin
 import com.shadowdash.game.data.GamePreferences
@@ -51,6 +53,13 @@ class GameEngine(
 
     private var trailTimer = 0f
     private var invulnerableTimer = 0f
+    private var hudUpdateTimer = 0f
+
+    private val mainHandler = try {
+        Handler(Looper.getMainLooper())
+    } catch (e: Exception) {
+        null
+    }
 
     // Callback for UI updates
     var onStateChanged: ((GameMode, RunStats) -> Unit)? = null
@@ -76,10 +85,13 @@ class GameEngine(
         stats.crystalsCollected = 0
         stats.isNewHighScore = false
         stats.countdownRemaining = 3.0f
+        stats.hasShield = false
+        stats.magnetRemaining = 0f
 
         currentSpeed = baseSpeed
         trailTimer = 0f
         invulnerableTimer = 0f
+        hudUpdateTimer = 0f
         gameMode = GameMode.COUNTDOWN
 
         notifyState()
@@ -160,6 +172,8 @@ class GameEngine(
         val distanceGained = currentSpeed * dt * 0.08f
         stats.distance += distanceGained
         stats.score = stats.distance.toInt() + (stats.crystalsCollected * 10)
+        stats.hasShield = player.hasShield
+        stats.magnetRemaining = player.magnetTimer
 
         // Update Parallax
         parallax.update(dt, currentSpeed)
@@ -202,6 +216,7 @@ class GameEngine(
                     audioManager.playSound(AudioManager.SOUND_SHIELD_BREAK)
                     spawnShieldBreakParticles(player.x + player.width / 2f, player.y + player.height / 2f)
                     obsIterator.remove()
+                    notifyState()
                 } else {
                     // Fatal collision
                     handleGameOver()
@@ -230,6 +245,7 @@ class GameEngine(
                 audioManager.playSound(sound)
                 spawnCrystalSparkles(c.x + c.size / 2f, c.y + c.size / 2f, c.type.color.toInt())
                 crystalIterator.remove()
+                notifyState()
             }
         }
 
@@ -256,13 +272,19 @@ class GameEngine(
                     spawnSparkleBurst(p.x, p.y, 0xFFE040FB.toInt(), 20)
                 }
                 powerUpIterator.remove()
+                notifyState()
             }
         }
 
         // Update Particles
         updateParticles(dt)
 
-        notifyState()
+        // Throttle HUD updates to ~20 FPS for silky smooth score/distance ticking without Compose jank
+        hudUpdateTimer += dt
+        if (hudUpdateTimer >= 0.05f) {
+            hudUpdateTimer = 0f
+            notifyState()
+        }
     }
 
     private fun updateParticles(dt: Float) {
@@ -419,7 +441,18 @@ class GameEngine(
     }
 
     private fun notifyState() {
-        onStateChanged?.invoke(gameMode, stats)
+        stats.hasShield = player.hasShield
+        stats.magnetRemaining = player.magnetTimer
+        val snapshot = stats.copy()
+        val mode = gameMode
+        val handler = mainHandler
+        if (handler != null) {
+            handler.post {
+                onStateChanged?.invoke(mode, snapshot)
+            }
+        } else {
+            onStateChanged?.invoke(mode, snapshot)
+        }
     }
 }
 
