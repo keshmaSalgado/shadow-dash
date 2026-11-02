@@ -128,6 +128,17 @@ data class CharacterSkin(
                 eyeColor = 0xFFBAE6FD,
                 auraColor = 0x6638BDF8,
                 particleType = ParticleType.FROST_CRYSTALS
+            ),
+            CharacterSkin(
+                id = "celestial_dragon",
+                name = "Celestial Dragon",
+                description = "Mythical cosmic dragon ruler wreathed in stellar runes.",
+                cost = 400,
+                isUnlockedByDefault = false,
+                bodyColor = 0xFF180A2E,
+                eyeColor = 0xFFFDE047,
+                auraColor = 0x66A855F7,
+                particleType = ParticleType.COSMIC_RUNES
             )
         )
 
