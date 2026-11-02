@@ -87,6 +87,11 @@ object SoundGenerator {
             generateStarfallSanctuaryMusic()
         }
 
+        // 13. Eclipse Chase (Dramatic dark fantasy 135 BPM chase)
+        soundMap["eclipse_chase"] = getOrCreateWav(audioDir, "eclipse_chase.wav") {
+            generateEclipseChaseMusic()
+        }
+
         return soundMap
     }
 
@@ -366,6 +371,49 @@ object SoundGenerator {
 
             val mixed = (pianoWave + chimeWave).coerceIn(-1.0, 1.0)
             samples[i] = (mixed * 18500).toInt().toShort()
+        }
+        return samples
+    }
+
+    private fun generateEclipseChaseMusic(): ShortArray {
+        // 7.11 seconds (16 beats at 135 BPM) dramatic dark fantasy chase loop
+        val durationSec = 7.11f
+        val numSamples = (SAMPLE_RATE * durationSec).toInt()
+        val samples = ShortArray(numSamples)
+
+        val beatDuration = durationSec / 16.0
+        val sixteenthDuration = beatDuration / 4.0
+
+        // Driving gothic minor progression: Cm -> Ab -> Fm -> G7
+        val ostinatoRoot = doubleArrayOf(130.81, 103.83, 87.31, 98.0) // C3, Ab2, F2, G2
+
+        for (i in 0 until numSamples) {
+            val t = i.toDouble() / SAMPLE_RATE
+            val sixteenthIndex = (t / sixteenthDuration).toInt()
+            val measureIndex = (sixteenthIndex / 16) % 4
+            val stepInMeasure = sixteenthIndex % 16
+
+            val root = ostinatoRoot[measureIndex]
+            val timeInStep = t - (sixteenthIndex * sixteenthDuration)
+            val staccatoDecay = exp(-timeInStep * 24.0)
+
+            // Heavy rhythmic bass ostinato (octave hopping)
+            val isUpperOctave = (stepInMeasure % 4 == 2)
+            val currentBassFreq = if (isUpperOctave) root * 2.0 else root
+            val bass = (sin(2.0 * PI * currentBassFreq * t) +
+                    0.5 * sin(4.0 * PI * currentBassFreq * t) +
+                    0.25 * sin(6.0 * PI * currentBassFreq * t)) * staccatoDecay * 0.42
+
+            // High tension string tremolo (minor 2nd friction)
+            val tremolo = (sin(2.0 * PI * 523.25 * t) + 0.7 * sin(2.0 * PI * 554.37 * t)) * 0.15 * sin(2.0 * PI * 8.0 * t)
+
+            // Percussive war drum thud on beats 1 and 3 of every measure
+            val timeInHalfMeasure = t % (beatDuration * 2.0)
+            val drumDecay = exp(-timeInHalfMeasure * 22.0)
+            val drum = sin(2.0 * PI * 65.0 * timeInHalfMeasure) * drumDecay * 0.4
+
+            val mixed = (bass + tremolo + drum).coerceIn(-1.0, 1.0)
+            samples[i] = (mixed * 19500).toInt().toShort()
         }
         return samples
     }
