@@ -59,6 +59,7 @@ fun SettingsScreen(
 ) {
     var isSoundEnabled by remember { mutableStateOf(preferences.isSoundEnabled) }
     var isMusicEnabled by remember { mutableStateOf(preferences.isMusicEnabled) }
+    var selectedTrackId by remember { mutableStateOf(preferences.selectedMusicTrackId) }
     var isHapticsEnabled by remember { mutableStateOf(preferences.isHapticsEnabled) }
     var showResetDialog by remember { mutableStateOf(false) }
 
@@ -142,6 +143,66 @@ fun SettingsScreen(
                     audioManager.setMusicEnabled(it)
                 }
             )
+
+            // Music Soundtrack Selector
+            if (isMusicEnabled) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF0C142A))
+                        .padding(10.dp)
+                ) {
+                    Text(
+                        text = "SELECT SOUNDTRACK",
+                        color = NeonCyan,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        com.shadowdash.game.audio.MusicTrack.ALL_TRACKS.forEach { track ->
+                            val isSelected = selectedTrackId == track.id
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(if (isSelected) NeonCyan.copy(alpha = 0.25f) else Color(0xFF172346))
+                                    .border(
+                                        1.dp,
+                                        if (isSelected) NeonCyan else Color(0xFF334155),
+                                        RoundedCornerShape(8.dp)
+                                    )
+                                    .clickable {
+                                        selectedTrackId = track.id
+                                        audioManager.setMusicTrack(track.id)
+                                    }
+                                    .padding(vertical = 8.dp, horizontal = 4.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = track.title,
+                                        color = if (isSelected) Color.White else Color(0xFF94A3B8),
+                                        fontSize = 10.sp,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                        maxLines = 1
+                                    )
+                                    Text(
+                                        text = "${track.tempoBpm} BPM",
+                                        color = if (isSelected) NeonCyan else Color(0xFF64748B),
+                                        fontSize = 9.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             // Haptics Toggle
             SettingsToggleRow(
