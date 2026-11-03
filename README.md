@@ -4,7 +4,7 @@
 
 ---
 
-## ðŸŒŸ Key Features
+## Ã°Å¸Å’Å¸ Key Features
 
 1. **Pure Native Android & Kotlin**
    - High-performance 60 FPS dedicated game thread using `SurfaceView` and native `Canvas`.
@@ -27,17 +27,17 @@
    - Layered parallax background: Twinkling night sky, glowing crescent moon, distant mountain silhouettes, midground enchanted trees with bioluminescent fungi, and mossy ground.
    - Original shadow creature with animated running legs, eye blinking, squash-and-stretch physics, and trail particle systems.
 
-5. **Character Skins & Progression (10 Playable Roster)**
+5. **Character Skins & Progression (10 Playable Roster with Unique Perks)**
    - **Shadow Sprite** (Default / Free): Classic twilight obsidian creature with cyan glow.
-   - **Neon Phantom** (50 Crystals): Electric turquoise glow trailing cyan sparks.
+   - **Neon Phantom** (50 Crystals): Electric turquoise glow (+4% speed boost & cyan sparks).
    - **Lunar Oracle** (75 Crystals): Celestial silver spirit with moonlight halo & starlight dust.
-   - **Void Monarch** (120 Crystals): Regal violet entity trailing amethyst void embers.
-   - **Solar Phoenix** (150 Crystals): Radiant solar spirit with golden crest & sun flares.
-   - **Emerald Guardian** (180 Crystals): Ancient forest druid with jade leaf horns & bioluminescent spores.
-   - **Cyber Glitch** (220 Crystals): Holographic digital entity trailing matrix pixel data.
+   - **Void Monarch** (120 Crystals): Regal violet entity with void gravitational pull (+50px magnet radius).
+   - **Solar Phoenix** (150 Crystals): Radiant solar spirit with golden crest & sun flares (+5% speed boost).
+   - **Emerald Guardian** (180 Crystals): Ancient forest druid with jade leaf horns & bio-spores (+30px magnet radius).
+   - **Cyber Glitch** (220 Crystals): Holographic digital entity trailing matrix pixel data (+6% speed boost).
    - **Crimson Wraith** (250 Crystals): Volcanic ember beast trailing blazing crimson flames.
-   - **Frost Specter** (300 Crystals): Glacial revenant with sub-zero icicle spires & snowflake drift.
-   - **Celestial Dragon** (400 Crystals): Legendary cosmic ruler with golden swept horns & astral rune rings.
+   - **Frost Specter** (300 Crystals): Glacial revenant with sub-zero icicle spires & snowflake drift (+40px magnet radius).
+   - **Celestial Dragon** (400 Crystals): Legendary cosmic ruler with golden swept horns (+3% speed boost & +80px magnet radius).
    - Progress, crystals, and high scores are persisted locally in thread-safe preferences.
 
 6. **Procedural 16-bit PCM Audio System & Multi-Track Soundtracks**
@@ -52,56 +52,56 @@
 
 ---
 
-## ðŸ“‚ Project Architecture
+## Ã°Å¸â€œâ€š Project Architecture
 
 ```
 shadow-dash/
-â”œâ”€â”€ app/
-â”‚   â”œâ”€â”€ build.gradle.kts
-â”‚   â””â”€â”€ src/
-â”‚       â”œâ”€â”€ main/
-â”‚       â”‚   â”œâ”€â”€ AndroidManifest.xml
-â”‚       â”‚   â”œâ”€â”€ java/com/shadowdash/game/
-â”‚       â”‚   â”‚   â”œâ”€â”€ MainActivity.kt                # Root activity & sticky immersive window setup
-â”‚       â”‚   â”‚   â”œâ”€â”€ ShadowDashApp.kt               # Application entry & audio preheating
-â”‚       â”‚   â”‚   â”œâ”€â”€ audio/
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ AudioManager.kt            # SoundPool & MediaPlayer lifecycle management
-â”‚       â”‚   â”‚   â”‚   â””â”€â”€ SoundGenerator.kt          # Procedural 44.1kHz 16-bit PCM WAV synthesizer
-â”‚       â”‚   â”‚   â”œâ”€â”€ data/
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ CharacterSkin.kt           # Skin definitions, particle types & stats
-â”‚       â”‚   â”‚   â”‚   â””â”€â”€ GamePreferences.kt         # Persistent local storage for crystals & scores
-â”‚       â”‚   â”‚   â”œâ”€â”€ engine/
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ CollisionDetector.kt       # Fair AABB collision logic
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ GameEngine.kt              # Core loop physics, difficulty scaling & entities
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ GameRect.kt                # Platform-independent bounding box
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ GameState.kt               # Run statistics & game states (Countdown, Playing, etc.)
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ GameSurfaceView.kt         # Dedicated 60 FPS SurfaceView & gesture handling
-â”‚       â”‚   â”‚   â”‚   â””â”€â”€ Spawner.kt                 # Dynamic pattern-based obstacle/crystal spawner
-â”‚       â”‚   â”‚   â”œâ”€â”€ entities/
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ Crystal.kt                 # Collectible crystals with magnet physics
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ Obstacle.kt                # Rocks, spikes, low branches, floating orbs
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ Particle.kt                # Smoke, sparks, embers, and death bursts
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ Player.kt                  # Character physics, jump/slide states & timers
-â”‚       â”‚   â”‚   â”‚   â””â”€â”€ PowerUp.kt                 # Shield & Magnet entities
-â”‚       â”‚   â”‚   â”œâ”€â”€ graphics/
-â”‚       â”‚   â”‚   â”‚   â”œâ”€â”€ ParallaxBackground.kt      # Multi-layered night sky & forest rendering
-â”‚       â”‚   â”‚   â”‚   â””â”€â”€ SpriteDrawer.kt            # Procedural Canvas vector drawing
-â”‚       â”‚   â”‚   â””â”€â”€ ui/
-â”‚       â”‚   â”‚       â”œâ”€â”€ CharacterSelectScreen.kt   # Skin unlock & selection carousel
-â”‚       â”‚   â”‚       â”œâ”€â”€ GameOverScreen / Dialogs   # Score summaries & restart prompts
-â”‚       â”‚   â”‚       â”œâ”€â”€ GameScreen.kt              # SurfaceView host & HUD overlay
-â”‚       â”‚   â”‚       â”œâ”€â”€ MainMenuScreen.kt          # Animated main menu with play & stats
-â”‚       â”‚   â”‚       â”œâ”€â”€ ScreenState.kt             # Navigation state definitions
-â”‚       â”‚   â”‚       â”œâ”€â”€ SettingsScreen.kt          # Audio & haptics toggles + reset option
-â”‚       â”‚   â”‚       â”œâ”€â”€ SplashScreen.kt            # Atmospheric splash screen
-â”‚       â”‚   â”‚       â””â”€â”€ theme/                     # Compose colors, typography & dark theme
-â”‚       â”‚   â””â”€â”€ res/                               # Vector drawables, themes, mipmap launcher icons
-â”‚       â””â”€â”€ test/                                  # Unit tests covering physics, collision & skins
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ app/
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ build.gradle.kts
+Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ src/
+Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ main/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ AndroidManifest.xml
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ java/com/shadowdash/game/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ MainActivity.kt                # Root activity & sticky immersive window setup
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ ShadowDashApp.kt               # Application entry & audio preheating
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ audio/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ AudioManager.kt            # SoundPool & MediaPlayer lifecycle management
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ SoundGenerator.kt          # Procedural 44.1kHz 16-bit PCM WAV synthesizer
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ data/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ CharacterSkin.kt           # Skin definitions, particle types & stats
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ GamePreferences.kt         # Persistent local storage for crystals & scores
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ engine/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ CollisionDetector.kt       # Fair AABB collision logic
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ GameEngine.kt              # Core loop physics, difficulty scaling & entities
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ GameRect.kt                # Platform-independent bounding box
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ GameState.kt               # Run statistics & game states (Countdown, Playing, etc.)
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ GameSurfaceView.kt         # Dedicated 60 FPS SurfaceView & gesture handling
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ Spawner.kt                 # Dynamic pattern-based obstacle/crystal spawner
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ entities/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ Crystal.kt                 # Collectible crystals with magnet physics
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ Obstacle.kt                # Rocks, spikes, low branches, floating orbs
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ Particle.kt                # Smoke, sparks, embers, and death bursts
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ Player.kt                  # Character physics, jump/slide states & timers
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ PowerUp.kt                 # Shield & Magnet entities
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ graphics/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ ParallaxBackground.kt      # Multi-layered night sky & forest rendering
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ SpriteDrawer.kt            # Procedural Canvas vector drawing
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ ui/
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ CharacterSelectScreen.kt   # Skin unlock & selection carousel
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ GameOverScreen / Dialogs   # Score summaries & restart prompts
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ GameScreen.kt              # SurfaceView host & HUD overlay
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ MainMenuScreen.kt          # Animated main menu with play & stats
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ ScreenState.kt             # Navigation state definitions
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ SettingsScreen.kt          # Audio & haptics toggles + reset option
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ SplashScreen.kt            # Atmospheric splash screen
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€š       Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ theme/                     # Compose colors, typography & dark theme
+Ã¢â€â€š       Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ res/                               # Vector drawables, themes, mipmap launcher icons
+Ã¢â€â€š       Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ test/                                  # Unit tests covering physics, collision & skins
 ```
 
 ---
 
-## ðŸ› ï¸ Build & Run Instructions
+## Ã°Å¸â€ºÂ Ã¯Â¸Â Build & Run Instructions
 
 ### Prerequisites
 - Android Studio Ladybug / Meerkat (or newer)
