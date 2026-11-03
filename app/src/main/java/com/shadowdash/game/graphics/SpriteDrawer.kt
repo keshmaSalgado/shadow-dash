@@ -36,10 +36,21 @@ class SpriteDrawer {
 
         canvas.save()
 
+        val auraRadius = (player.width.coerceAtLeast(player.height) / 2f) + 14f
+
+        // 0. High-speed after-image ghost silhouettes
+        val shadowEchoPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = player.skin.auraColor.toInt()
+            style = Paint.Style.FILL
+        }
+        shadowEchoPaint.alpha = 40
+        canvas.drawCircle(cx - 22f, cy, auraRadius * 0.82f, shadowEchoPaint)
+        shadowEchoPaint.alpha = 18
+        canvas.drawCircle(cx - 42f, cy, auraRadius * 0.65f, shadowEchoPaint)
+
         // 1. Aura glow
         auraPaint.color = player.skin.auraColor.toInt()
         auraPaint.style = Paint.Style.FILL
-        val auraRadius = (player.width.coerceAtLeast(player.height) / 2f) + 14f
         canvas.drawCircle(cx, cy, auraRadius, auraPaint)
 
         // 2. Shield Bubble
