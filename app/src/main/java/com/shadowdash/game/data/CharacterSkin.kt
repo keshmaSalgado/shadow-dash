@@ -24,7 +24,9 @@ data class CharacterSkin(
     val bodyColor: Long,       // 0xAARRGGBB
     val eyeColor: Long,        // 0xAARRGGBB
     val auraColor: Long,       // 0xAARRGGBB
-    val particleType: ParticleType
+    val particleType: ParticleType,
+    val speedMultiplier: Float = 1.0f,
+    val magnetRadiusBonus: Float = 0f
 ) {
     companion object {
         val DEFAULT_SKIN_ID = "shadow_sprite"
@@ -50,7 +52,8 @@ data class CharacterSkin(
                 bodyColor = 0xFF0A2239,
                 eyeColor = 0xFF00FFFF,
                 auraColor = 0x6600FFFF,
-                particleType = ParticleType.CYAN_SPARKS
+                particleType = ParticleType.CYAN_SPARKS,
+                speedMultiplier = 1.04f
             ),
             CharacterSkin(
                 id = "void_monarch",
@@ -61,7 +64,8 @@ data class CharacterSkin(
                 bodyColor = 0xFF1F0D3D,
                 eyeColor = 0xFFE040FB,
                 auraColor = 0x66D500F9,
-                particleType = ParticleType.VOID_EMBERS
+                particleType = ParticleType.VOID_EMBERS,
+                magnetRadiusBonus = 50f
             ),
             CharacterSkin(
                 id = "crimson_wraith",
@@ -94,7 +98,8 @@ data class CharacterSkin(
                 bodyColor = 0xFF381504,
                 eyeColor = 0xFFFFD700,
                 auraColor = 0x66FFA000,
-                particleType = ParticleType.SOLAR_SPARKS
+                particleType = ParticleType.SOLAR_SPARKS,
+                speedMultiplier = 1.05f
             ),
             CharacterSkin(
                 id = "emerald_guardian",
@@ -105,7 +110,8 @@ data class CharacterSkin(
                 bodyColor = 0xFF062817,
                 eyeColor = 0xFF10B981,
                 auraColor = 0x6634D399,
-                particleType = ParticleType.EMERALD_SPORES
+                particleType = ParticleType.EMERALD_SPORES,
+                magnetRadiusBonus = 30f
             ),
             CharacterSkin(
                 id = "cyber_glitch",
@@ -116,7 +122,8 @@ data class CharacterSkin(
                 bodyColor = 0xFF0B1B1E,
                 eyeColor = 0xFF00FF66,
                 auraColor = 0x66FF0055,
-                particleType = ParticleType.CYBER_PIXELS
+                particleType = ParticleType.CYBER_PIXELS,
+                speedMultiplier = 1.06f
             ),
             CharacterSkin(
                 id = "frost_specter",
@@ -127,7 +134,8 @@ data class CharacterSkin(
                 bodyColor = 0xFF0D233A,
                 eyeColor = 0xFFBAE6FD,
                 auraColor = 0x6638BDF8,
-                particleType = ParticleType.FROST_CRYSTALS
+                particleType = ParticleType.FROST_CRYSTALS,
+                magnetRadiusBonus = 40f
             ),
             CharacterSkin(
                 id = "celestial_dragon",
@@ -138,7 +146,9 @@ data class CharacterSkin(
                 bodyColor = 0xFF180A2E,
                 eyeColor = 0xFFFDE047,
                 auraColor = 0x66A855F7,
-                particleType = ParticleType.COSMIC_RUNES
+                particleType = ParticleType.COSMIC_RUNES,
+                speedMultiplier = 1.03f,
+                magnetRadiusBonus = 80f
             )
         )
 

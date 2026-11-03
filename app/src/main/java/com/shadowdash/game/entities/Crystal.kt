@@ -24,7 +24,14 @@ class Crystal(
         updateHitbox()
     }
 
-    fun update(dt: Float, speed: Float, playerX: Float, playerY: Float, isMagnetActive: Boolean) {
+    fun update(
+        dt: Float,
+        speed: Float,
+        playerX: Float,
+        playerY: Float,
+        isMagnetActive: Boolean,
+        magnetRadiusBonus: Float = 0f
+    ) {
         if (isCollected) return
 
         x -= speed * dt
@@ -32,11 +39,11 @@ class Crystal(
         y = baseY + sin(bobPhase) * 8f
 
         // Magnet attraction
-        if (isMagnetActive) {
+        if (isMagnetActive || magnetRadiusBonus > 0f) {
             val dx = playerX - x
             val dy = playerY - y
             val dist = hypot(dx, dy)
-            val magnetRadius = 450f
+            val magnetRadius = if (isMagnetActive) (450f + magnetRadiusBonus) else magnetRadiusBonus
 
             if (dist < magnetRadius && dist > 5f) {
                 val pullSpeed = 900f * (1f - dist / magnetRadius) + 400f

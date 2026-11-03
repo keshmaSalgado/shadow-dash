@@ -164,9 +164,9 @@ class GameEngine(
     }
 
     private fun updatePlaying(dt: Float) {
-        // Difficulty scaling: speed increases with distance
+        // Difficulty scaling: speed increases with distance and skin perk
         val speedBonus = (stats.distance / 100f) * 6.5f
-        currentSpeed = (baseSpeed + speedBonus).coerceAtMost(980f)
+        currentSpeed = ((baseSpeed + speedBonus) * player.skin.speedMultiplier).coerceAtMost(1050f)
 
         // Distance & Score
         val distanceGained = currentSpeed * dt * 0.08f
@@ -229,7 +229,14 @@ class GameEngine(
         val crystalIterator = crystals.iterator()
         while (crystalIterator.hasNext()) {
             val c = crystalIterator.next()
-            c.update(dt, currentSpeed, player.x + player.width / 2f, player.y + player.height / 2f, player.isMagnetActive)
+            c.update(
+                dt = dt,
+                speed = currentSpeed,
+                playerX = player.x + player.width / 2f,
+                playerY = player.y + player.height / 2f,
+                isMagnetActive = player.isMagnetActive,
+                magnetRadiusBonus = player.skin.magnetRadiusBonus
+            )
 
             if (c.isOffScreen) {
                 crystalIterator.remove()
