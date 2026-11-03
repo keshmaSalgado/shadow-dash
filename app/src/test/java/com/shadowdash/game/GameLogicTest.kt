@@ -133,6 +133,32 @@ class GameLogicTest {
     }
 
     @Test
+    fun testCharacterPerksAndMultipliers() {
+        val defaultSkin = CharacterSkin.getById("shadow_sprite")
+        assertEquals(1.0f, defaultSkin.speedMultiplier, 0.001f)
+        assertEquals(0f, defaultSkin.magnetRadiusBonus, 0.001f)
+
+        val cyberGlitch = CharacterSkin.getById("cyber_glitch")
+        assertTrue("Cyber glitch should have speed perk", cyberGlitch.speedMultiplier > 1.05f)
+
+        val dragon = CharacterSkin.getById("celestial_dragon")
+        assertTrue("Celestial dragon should have large magnet perk", dragon.magnetRadiusBonus >= 80f)
+    }
+
+    @Test
+    fun testCrystalMagnetWithBonusRadius() {
+        val crystal = Crystal(x = 600f, baseY = groundY - 100f, type = CrystalType.BLUE)
+        // With default magnet (radius 450f), at distance 500f it is not pulled
+        val initialX = crystal.x
+        crystal.update(dt = 0.016f, speed = 0f, playerX = 100f, playerY = groundY - 100f, isMagnetActive = false, magnetRadiusBonus = 0f)
+        assertEquals(initialX, crystal.x, 0.01f)
+
+        // With dragon magnet bonus (radius 450 + 80 = 530f), distance 500f enters magnet field!
+        crystal.update(dt = 0.016f, speed = 0f, playerX = 100f, playerY = groundY - 100f, isMagnetActive = true, magnetRadiusBonus = 80f)
+        assertTrue("Crystal should be pulled toward player with bonus radius", crystal.x < initialX)
+    }
+
+    @Test
     fun testMusicTrackCatalog() {
         assertEquals(4, com.shadowdash.game.audio.MusicTrack.ALL_TRACKS.size)
 
