@@ -33,6 +33,9 @@ class AudioManager private constructor(private val context: Context) {
         const val SOUND_COLLISION = "collision"
         const val SOUND_CLICK = "click"
 
+        const val DEFAULT_MUSIC_VOLUME = 0.55f
+        const val DEFAULT_SFX_VOLUME = 1.0f
+
         @Volatile
         private var instance: AudioManager? = null
 
@@ -148,6 +151,15 @@ class AudioManager private constructor(private val context: Context) {
         val file = musicFiles[trackId] ?: musicFiles["ambient_music"]
         if (file != null && file.exists()) {
             prepareMusicPlayer(file)
+        }
+    }
+
+    fun setMusicVolume(volume: Float) {
+        val clamped = volume.coerceIn(0f, 1f)
+        try {
+            mediaPlayer?.setVolume(clamped, clamped)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting music volume", e)
         }
     }
 

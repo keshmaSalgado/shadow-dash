@@ -95,6 +95,13 @@ object SoundGenerator {
         return soundMap
     }
 
+    fun clearAudioCache(context: Context) {
+        val audioDir = File(context.cacheDir, "shadow_audio")
+        if (audioDir.exists()) {
+            audioDir.deleteRecursively()
+        }
+    }
+
     private fun getOrCreateWav(dir: File, fileName: String, generator: () -> ShortArray): File {
         val file = File(dir, fileName)
         if (!file.exists() || file.length() == 0L) {
